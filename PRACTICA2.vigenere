@@ -15,7 +15,7 @@ public:
     string alfabeto;
     string descifrar(string);
     string cifrarascii(string);
-   // string cifrarhex(string);
+    string cifrarhex(string);
    void selec(string);
 };
 vigenere::vigenere()
@@ -29,7 +29,7 @@ vigenere::vigenere()
 }
 
 string vigenere::cifrando(string msj){
-    string MensajeCifrado;
+    string msgCifrado;
     int tam = alfabeto.length();
     int pocision,pocision1,pocision_cifrado;
     int cont=0;
@@ -45,19 +45,19 @@ string vigenere::cifrando(string msj){
         else{
             cont++;
         }
-        MensajeCifrado=MensajeCifrado+alfabeto[pocision_cifrado];
+        msgCifrado=msgCifrado+alfabeto[pocision_cifrado];
         /*return cifrado;*/
     }
-    return MensajeCifrado;
+    return msgCifrado;
 }
-string vigenere::descifrar(string mensajeencriptado){
-    string mensajedescifrado;
+string vigenere::descifrar(string msgencriptado){
+    string msgdescifrado;
     int tam = alfabeto.length();
     int pocision,pocision1,pocision_descifrado,value;
     int cont=0;
-    for (int i=0;i<mensajeencriptado.length(); i ++)
+    for (int i=0;i<msgencriptado.length(); i ++)
     {
-        pocision1=alfabeto.find(mensajeencriptado[i]);
+        pocision1=alfabeto.find(msgencriptado[i]);
         pocision=alfabeto.find(clave[cont]);
 
         if(pocision1<pocision){
@@ -74,50 +74,69 @@ string vigenere::descifrar(string mensajeencriptado){
         else{
         cont++;
         }
-        mensajedescifrado=mensajedescifrado+alfabeto[pocision_descifrado];
-        /*return mensaje*/
+        msgdescifrado=msgdescifrado+alfabeto[pocision_descifrado];
+        /*return msg*/
     }
-    return mensajedescifrado;
+    return msgdescifrado;
 }
-string vigenere::cifrarascii(string mensaje)
+string vigenere::cifrarascii(string msg)
 {
   int aux2,aux;
-  for(int i=0;i<mensaje.length(); i ++)
+  for(int i=0;i<msg.length(); i ++)
   {
-    aux=int(mensaje[i]);
+    aux=int(msg[i]);
     aux2=int(clave[i%clave.length()]);
-    cout<<aux<<"     "<<mensaje[i]<<"     "<<aux2<<"     "<< clave[i%clave.length()]<<"     "<<(aux2+aux)%122<<endl;
-    if(mensaje[i]==' ' or mensaje[i]==',' or mensaje[i]=='.')
+    cout<<aux<<"     "<<msg[i]<<"     "<<aux2<<"     "<< clave[i%clave.length()]<<"     "<<(aux2+aux)%122<<endl;
+    if(msg[i]==' ' or msg[i]==',' or msg[i]=='.')
     {
-      mensaje[i]=mensaje[aux];
+      msg[i]=msg[aux];
     }
-    mensaje[i]=(aux2+aux)%122 ;
-    //return mensaje
+    msg[i]=(aux2+aux)%122 ;
+    //return msg
   }
-  return mensaje;
+  return msg;
 }
-void vigenere::selec(string mensaje)
+string vigenere::cifrarhex(string msg)
+{
+  int aux2,aux;
+  for(int i=0;i<msg.length(); i ++)
+  {
+    aux=int(msg[i]);
+    aux2=int(clave[i%clave.length()]);
+    //cout<<aux<<"     "<<msg[i]<<"     "<<aux2<<"     "<< clave[i%clave.length()]<<"     "<<(aux2+aux)%122<<endl;
+    if(msg[i]==' ' or msg[i]==',' or msg[i]=='.')
+    {
+      msg[i]=msg[aux];
+    }
+    msg[i]=(aux2+aux)%122 ;
+   cout<< hex<<msg[i];
+  }
+  return msg;
+  
+}
+void vigenere::selec(string msg)
 {
     int a;
     cout << endl;
     cout<<"ASCII -> 1"<<endl;
-    cout<<"Cifrando -> 2"<<endl;
-    cout<<"Descifrar ->3"<<endl;
-  //  cout<<"HEX ->4"<<endl;
+    cout<<"HEX -> 2"<<endl;
+    /*cout<<"CIFRADO ->3"<<endl;
+    cout<<"DESCIFRADO ->4"<<endl;*/
     cin >> a;
     cout << "\n";
     switch (a) 
     {
       case 1:
-        cifrando(mensaje);
-        
+      cout<<"******************ASCII*******************"<<endl;
+        cifrarascii(msg);
+        cout<<endl<<endl;
         break; 
       case 2:
-        descifrar(mensaje);
-      case 3:
-        cifrarascii(mensaje);
-        
-    }
+       
+        cifrarhex(msg);
+        cout<<endl<<endl;
+        break;
+    }    
 }
 int main()
 {
@@ -125,16 +144,17 @@ int main()
   vigenere emisor;
   vigenere receptor;
   vigenere ascii;
- // vigenere cifrarhex;
+  vigenere hex;
   vigenere seleccion;
   seleccion.selec(mensaj);
-  string mensaje=emisor.cifrando(mensaj);
-  cout<<mensaje<<endl<<endl;
-  string mensaje_descifrado=receptor.descifrar(mensaje);
-  cout<<mensaje_descifrado;
-  cout<<endl;
-  cout<<endl;
-  cout<<"Ascii"<<endl<<endl;
-  ascii.cifrarascii(mensaj);
-  //cout<<"Hex"<<endl<<endl;
+  string a;
+  a=ascii.cifrarascii(mensaj);
+  cout<<endl<<endl<<endl;
+  hex.cifrarhex(a);
+  string msg=emisor.cifrando(mensaj);
+  cout<<endl<<endl<<"msg CIFRADO: "<<endl<<endl;
+  cout<<msg<<endl<<endl;
+  string msg_descifrado=receptor.descifrar(msg);
+  cout<<endl<<endl<<"msg DESCIFRADO: "<<endl;
+  cout<<msg_descifrado<<endl;
 }
