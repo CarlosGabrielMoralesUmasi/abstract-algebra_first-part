@@ -1,0 +1,140 @@
+//**carlosMorles.cpp//
+#include <iostream>
+#include<string>
+using namespace std;
+
+class vigenere
+{
+private:
+    string clave;
+public:
+    vigenere();
+    string cifrar();
+    string cifrando(string );
+    string descifrando(string);
+    string alfabeto;
+    string descifrar(string);
+    string cifrarascii(string);
+   // string cifrarhex(string);
+   void selec(string);
+};
+vigenere::vigenere()
+{
+    alfabeto = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ,.";
+   // alfabeto= "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,.";
+   // alfabeto= "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+   // alfabeto= "abcdefghijklmnopqrstuvwxyz";
+   //clave="PABLONERUDA";
+    clave = "Pablo Neruda";
+}
+
+string vigenere::cifrando(string msj){
+    string MensajeCifrado;
+    int tam = alfabeto.length();
+    int pocision,pocision1,pocision_cifrado;
+    int cont=0;
+    for (int i=0;i<msj.length(); i ++)
+    {
+        pocision1=alfabeto.find(msj[i]);/*msj[i%msj.length()]*/
+        pocision=alfabeto.find(clave[cont]);
+        //cout<<pocision1<<pocision<<" ";
+        pocision_cifrado=(pocision1+pocision)%tam;
+        if (cont==clave.length()-1){
+            cont=0;
+        }
+        else{
+            cont++;
+        }
+        MensajeCifrado=MensajeCifrado+alfabeto[pocision_cifrado];
+        /*return cifrado;*/
+    }
+    return MensajeCifrado;
+}
+string vigenere::descifrar(string mensajeencriptado){
+    string mensajedescifrado;
+    int tam = alfabeto.length();
+    int pocision,pocision1,pocision_descifrado,value;
+    int cont=0;
+    for (int i=0;i<mensajeencriptado.length(); i ++)
+    {
+        pocision1=alfabeto.find(mensajeencriptado[i]);
+        pocision=alfabeto.find(clave[cont]);
+
+        if(pocision1<pocision){
+
+            pocision_descifrado=(pocision1-pocision)+tam;
+        }
+        else{
+                pocision_descifrado=(pocision1-pocision)%tam;
+
+        }
+        if (cont==clave.length()-1){
+            cont=0;
+        }
+        else{
+        cont++;
+        }
+        mensajedescifrado=mensajedescifrado+alfabeto[pocision_descifrado];
+        /*return mensaje*/
+    }
+    return mensajedescifrado;
+}
+string vigenere::cifrarascii(string mensaje)
+{
+  int aux2,aux;
+  for(int i=0;i<mensaje.length(); i ++)
+  {
+    aux=int(mensaje[i]);
+    aux2=int(clave[i%clave.length()]);
+    cout<<aux<<"     "<<mensaje[i]<<"     "<<aux2<<"     "<< clave[i%clave.length()]<<"     "<<(aux2+aux)%122<<endl;
+    if(mensaje[i]==' ' or mensaje[i]==',' or mensaje[i]=='.')
+    {
+      mensaje[i]=mensaje[aux];
+    }
+    mensaje[i]=(aux2+aux)%122 ;
+    //return mensaje
+  }
+  return mensaje;
+}
+void vigenere::selec(string mensaje)
+{
+    int a;
+    cout << endl;
+    cout<<"ASCII -> 1"<<endl;
+    cout<<"Cifrando -> 2"<<endl;
+    cout<<"Descifrar ->3"<<endl;
+  //  cout<<"HEX ->4"<<endl;
+    cin >> a;
+    cout << "\n";
+    switch (a) 
+    {
+      case 1:
+        cifrando(mensaje);
+        
+        break; 
+      case 2:
+        descifrar(mensaje);
+      case 3:
+        cifrarascii(mensaje);
+        
+    }
+}
+int main()
+{
+  string mensaj="Puedo escribir los versos mas tristes esta noche.Escribir, por ejemplo La noche esta estrellada, y tiritan, azules, los astros, a lo lejos.El viento de la noche gira en el cielo y canta. Puedo escribir los versos mas tristes esta noche. Yo la quise,y a veces ella tambien me quiso.";
+  vigenere emisor;
+  vigenere receptor;
+  vigenere ascii;
+ // vigenere cifrarhex;
+  vigenere seleccion;
+  seleccion.selec(mensaj);
+  string mensaje=emisor.cifrando(mensaj);
+  cout<<mensaje<<endl<<endl;
+  string mensaje_descifrado=receptor.descifrar(mensaje);
+  cout<<mensaje_descifrado;
+  cout<<endl;
+  cout<<endl;
+  cout<<"Ascii"<<endl<<endl;
+  ascii.cifrarascii(mensaj);
+  //cout<<"Hex"<<endl<<endl;
+}
