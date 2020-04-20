@@ -16,6 +16,7 @@ public:
     string cifrarhex(string);
     string agregarAQUI(string mens);
     string DagregarAQUI(string mens);
+    string cifrandoCamClave(string mens);
     void selec(string);
 };
 vigenere::vigenere()
@@ -23,7 +24,7 @@ vigenere::vigenere()
     alfabeto = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ,.";
     clave = "Pablo Neruda";
 }
-
+//************************************************************************************
 string vigenere::cifrando(string mens){
     string mensCifrado;
     int tam = alfabeto.length();
@@ -44,6 +45,7 @@ string vigenere::cifrando(string mens){
     }
     return mensCifrado;
 }
+//************************************************************************************
 string vigenere::descifrar(string mens){
     string mensdescifrado;
     int tam = alfabeto.length();
@@ -72,6 +74,7 @@ string vigenere::descifrar(string mens){
     }
     return mensdescifrado;
 }
+//************************************************************************************
 string vigenere::cifrarascii(string mens)
 {
   int aux2,aux;
@@ -88,6 +91,7 @@ string vigenere::cifrarascii(string mens)
   }
   return mens;
 }
+//************************************************************************************
 string vigenere::cifrarhex(string mens)
 {
   int aux2,aux;
@@ -104,6 +108,7 @@ string vigenere::cifrarhex(string mens)
   }
   return mens;
 }
+//************************************************************************************
 string vigenere::agregarAQUI(string mens)
 {
   string mensCifrado,A;
@@ -120,9 +125,6 @@ string vigenere::agregarAQUI(string mens)
       conta+=10;
     }
     mens+=Bdoble;
-    //cout<<agregar;
-   // return agregar;
-    //cout<<mens;
     for (int i=0;i<mens.length(); i ++)
     {
         
@@ -133,7 +135,6 @@ string vigenere::agregarAQUI(string mens)
         {
           cont=0;
         }
-
         else
         {
           cont++;
@@ -141,7 +142,7 @@ string vigenere::agregarAQUI(string mens)
         mensCifrado=mensCifrado+alfabeto[pocision_cifrado];
     }
     return mensCifrado;
-}
+}//************************************************************************************
 string vigenere::DagregarAQUI(string mens)
 {
     string mensdescifrado;
@@ -171,14 +172,38 @@ string vigenere::DagregarAQUI(string mens)
     }
     return mensdescifrado;
 }
+//************************************************************************************
+string vigenere::cifrandoCamClave(string mens){
+    string mensCifrado;
+    int tam = alfabeto.length();
+    int pocision,pocision1,pocision_cifrado;
+    int cont=0;
+    for (int i=0;i<mens.length(); i ++)
+    {
+        pocision1=alfabeto.find(mens[i]);
+        pocision=alfabeto.find(clave[cont]);
+        pocision_cifrado=(pocision1+pocision)%tam;
+        if (cont==clave.length()-1){
+            pocision1=alfabeto.find(mens[i]);
+            pocision=alfabeto.find(clave[i-clave.length()-1]);
+            pocision_cifrado=(pocision1+pocision)%tam;
+        }
+        else{
+            pocision1=alfabeto.find(mens[i]);
+            pocision=alfabeto.find(clave[cont]);
+            pocision_cifrado=(pocision1+pocision)%tam;
+        }
+        mensCifrado=mensCifrado+alfabeto[pocision_cifrado];
+    }
+    return mensCifrado;
+}
+//************************************************************************************
 void vigenere::selec(string mens)
 {
     int a;
     cout << endl;
     cout<<"ASCII -> 1"<<endl;
     cout<<"HEX -> 2"<<endl;
-  //  cout<<"CIFRADO -> 3"<<endl;
-   // cout<<"DESCIFRADO -> 4"<<endl;
     cin >> a;
     cout << "\n";
     switch (a) 
@@ -206,6 +231,7 @@ int main()
   vigenere seleccion;
   vigenere agregar;
   vigenere Dagregar;
+  vigenere Cambioclave;
   seleccion.selec(mens);
   string a;
   a=ascii.cifrarascii(mens);
@@ -217,12 +243,14 @@ int main()
   cout<<endl<<endl<<"mens DESCIFRADO sin (AGREGANDO 'AQUI' y 'W' ):"<<endl<<endl;
   string DAQUI=Dagregar.DagregarAQUI(AQUI);
   cout<<DAQUI<<endl <<endl;
+  cout<<endl<<endl<<"mens Cifrado cambiando clave :"<<endl<<endl;
+  string clave=Cambioclave.cifrandoCamClave(mens);
+  cout<<clave<<endl<<endl;
   string msg=emisor.cifrando(mens);
   cout<<endl<<endl<<"mens CIFRADO: "<<endl<<endl;
   cout<<msg<<endl<<endl;
   string mens_descifrado=receptor.descifrar(msg);
   cout<<endl<<endl<<"mens DESCIFRADO: "<<endl<<endl;
   cout<<mens_descifrado<<endl<<endl;
-  
 }
 //comprobado desde replit
